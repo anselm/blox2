@@ -1,0 +1,42 @@
+
+<html>
+<head>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.2/Tone.js" integrity="sha512-mC+4OB44BnfNO5Tgllht1G+rdH82tMFKIM9pPNoQSMFqYm8PnPCffmmqTt68XpkAiJrmsQJwvFWDl8Br1o6vUw==" crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+<script src="/socket.io/socket.io.js"></script>
+
+<style>
+body {
+	touch-action: none;
+	font-family: 'Roboto', sans-serif;
+}
+</style>
+<style>
+body { touch-action: none; }
+</style>
+
+</head>
+
+<body>
+</body>
+
+</html>
+
+<script type="module">
+
+// start a small networking wrapper - globally visible
+import {Net} from "/components/net.js"
+let net = window.net = new Net()
+
+// produce a blox into the dom
+import {Blox} from "/components/blox.js"
+window.Blox = Blox
+let blox = new Blox(0,0,{onload:"/examples/tests"})
+blox.onload = "/examples/tests"
+
+</script>
