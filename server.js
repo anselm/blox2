@@ -8,28 +8,31 @@ const port = 5000
 app.use(express.static('public'))
 
 let cache = {
-	1:{uuid:1,command:"update",kind:"message",value:"hello"},
-	2:{uuid:2,command:"update",kind:"message",value:"how"},
-	3:{uuid:3,command:"update",kind:"message",value:"goes"}
+	"/root/chat/1":{path:"/root/chat/1",blox:"message",event:"update",value:"This is some example data"},
+	"/root/chat/2":{path:"/root/chat/2",blox:"message",event:"update",value:"It is delivered to all new connections"},
+	"/root/chat/3":{path:"/root/chat/3",blox:"message",event:"update",value:"Delete this on the server"}
 }
 
+let channel = 'all'
+
 io.on('connection', (socket) => {
-	socket.on('blob', (blob) => {
-		switch(blob.command) {
+	socket.on(channel, (data) => {
+		switch(data.event) {
 			case "refresh":
-				for (const [key, value] of Object.entries(cache)) socket.emit('blob',value)
+				for (const [key, datacached] of Object.entries(cache)) socket.emit(channel,datacached)
 				break
 			case "update":
-				cache[blob.uuid]=blob
-				io.emit('blob',blob)
+				cache[data.path||data.uuid]=data
+				io.emit(channel,data)
 				break
 			case "delete":
-				delete cache[msg.uuid]
+				delete cache[data.path||data.uuid]
+				io.emit(channel,data)
 				break
 		}
 	})
 })
 
 http.listen(port, () => {
-	console.log('listening on *:3000')
+	console.log('listening on *:5000')
 })

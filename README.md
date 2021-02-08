@@ -1,7 +1,17 @@
 
-# Blox
+# BUGS
 
-Blox is a modular scripting language for building applications.
+	- this is all very early
+	- i need to reduce the weight on onprops() at least as used by subclasses - examine
+	- right now as well the renderer still has to be made before the children and that is a bit mess
+	- networking needs more thought around dynamic object creation; it also echoes locally when it does not need to, and there is no room based filtering
+	- there should be a concept of active or inactive scenes (in a large game you don't want all traffic that is not in your room or nearby)
+
+# GENERAL IDEA
+
+This is a riff on the previous blox project, to simplify the grammar. Rather than an ECS pattern I only use a hierarchy of blox - some of which can contain behavior. Also I add networking.
+
+In general Blox is a modular scripting language for building applications. It's more a "formalism" in that it is not hard for a programmer to circumvent, but the hope is that if programmers can work with novices, then we can have grammars that allow participation.
 
 A typical application can be described like so:
 
@@ -20,70 +30,15 @@ A typical application can be described like so:
 		}
 	}
 
-3d network helper object (this is optional - or can be in renderer)
+# SOME USE CASES
 
-	-> give each object a static uuid at load time - basically their name
-	-> give player a dynamic uuid
-	-> go out of our way to publish state change to the network
+	- an audio toy see - generative music toy https://medium.com/@alexbainter/making-generative-music-in-the-browser-bfb552a26b0b
+	- various small games
+	- multiplayer collab work env
+	- migrate other various demos from blox1
+	- art and particle fx
 
-	-> observe database changes in general:
-		-> revise objects when they change
-		-> add new objects
-
-
-
-
-
-#######################
-
-# Design
-
-- noise things want to wire say a raw sound file to a modulator
-
-- prop setting?
-	- i instance something; i could pass it the props - which would be nice
-	- i can feed it the props one by one; also nice
-	- 
-
-# TODO OTHER
-
-	- make audio pack - generative music toy https://medium.com/@alexbainter/making-generative-music-in-the-browser-bfb552a26b0b
-	- make seasteading game
-	- make mluitiplayer dragging game
-	- migrate my other demos
-	- try do fabulosity
-	- elles projects
-		- mostly particle effects
-	- procedural audio?
-
-
-
-
-
-
-
-
-
-Source code today is often a highly dense text prose with an unclear starting point, unclear structure and unclear relationships between parts. Source code can produce objects that appear entirely unrelated to the visual appearance of the code itself. Similar to DNA or musical notation, there is no relationship between the input and the output. Source code is text, and production of source code can be anything; visual effects, 3d models, sounds, smells, haptic feedback, the behavior of vastly slow or impossibly quick events.
-
-There are many efforts to provide both a high level visual representation and also the efficiency that expert programmers desire. UML (Unified Modeling Language) emerged as a way to organize objects (itself within a family of ideas called Object Oriented Programming). We also see tools like Pure Data and Max MSP as well as 
-
-
-https://en.wikipedia.org/wiki/Alan_Kay#Squeak,_Etoys,_and_Croquet
-
-The idea is to create a high level lego-like modular programming language that lets beginners build industrial strength applications.
-
-From a user perspective an application consists of 3 concepts: entities, components and wires:
-
-	1) An entity is a bucket that holds components; it's largely just a grouping concept.
-
-	2) Components do all the actual work, such as say being a 3d mesh or being a sound. They specify public interfaces.
-
-	3) Wires connect components to each other, such as say to change a sound based on mouse input.
-
-
-
-## Introduction
+# PHILOSOPHY
 
 We live in a world filled with different kinds of jobs, roles, skills. Some of us are social workers, some are pure artists, some of us practice law and understand a complex legal landscape. Some of us are architects, understanding issues around building codes and the kinds of structures that humans like to inhabit. Many of us have at one time or another worked in service industry jobs, catering, bussing, even just washing dishes. Some of us are plumbers, or electricians, or teach high-school kids, or just write books, or technical documentation, a few of us play with financial markets or have the freedom to just travel and explore the world at our leisure.
 
@@ -106,11 +61,9 @@ What we want is accessibility, without giving up accuracy. Representations (gram
 
 If people knew how easy it was to program - how similar it is to say plumbing, or electrical, or architecture - many more people would do it. There's a mystique around programming and in fact a kind of culture or priesthood where programmers often offer to do work for other people, but don't often empower other people to do the work themselves. Many of the kinds of things we pass off to professionals could in fact be done ourselves. And I'd argue that in an emerging world with all kinds of interacting devices in our homes and all around us - that programming should be seen as something that everybody does. It should be fairly accessible without too much work for those who are interested. Programming is also a powerful tool, and civic access to tools like this can help our society as a whole.
 
-
-
 ## General thoughts and approaches
 
-HISTORY. In this project what I want to do is look at earlier thinking around making programming accessible, and then play with grammars that would be useful both for novices and experts. Many experts such as Alan Kay and Brett Victor have thought about this a lot already. There's a very long history of thinking about programming as a whole as well - all the way back to Turing. Notables include Minksy as well: https://www.gwern.net/docs/www/web.media.mit.edu/b8c7bfd0757330c92e0f0f52a1ddc70b15468c26.html .
+HISTORY. In this project what I want to do is look at earlier thinking around making programming accessible, and then play with grammars that would be useful both for novices and experts. Many experts such as Alan Kay and Brett Victor have thought about this a lot already. There's a very long history of thinking about programming as a whole as well - all the way back to Turing. Notables include Minksy as well: https://www.gwern.net/docs/www/web.media.mit.edu/b8c7bfd0757330c92e0f0f52a1ddc70b15468c26.html . Also see Alan's work at: https://en.wikipedia.org/wiki/Alan_Kay#Squeak,_Etoys,_and_Croquet
 
 VISUAL. I lean towards a visual flow diagram language. I'd like to use color and animation in representing code; I feel we have richer displays and can use more capabilities of those displays. At the same time I do believe that it should work for color blind people. Ordinary flowcharts, finite state machines and UML diagrams can be seen as visual programming foundations. Wikipedia has others as well: https://en.wikipedia.org/wiki/Visual_programming_language . I do want to leverage some of that thinking - but it is worth noting that there can be a tension between the components of a system and how execution flows through a system. I lean towards representation of the parts, more than representation of the execution flow. I do want to show relationships between parts, but I prefer to have the parts themselves be predominant.
 

@@ -8,6 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.min.js" crossorigin="anonymous"></script>
+<script src='https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r125/examples/js/loaders/GLTFLoader.js'></script>
+
+
 <script src="/socket.io/socket.io.js"></script>
 
 <style>
@@ -29,14 +33,23 @@ body { touch-action: none; }
 
 <script type="module">
 
-// start a small networking wrapper - globally visible
-import {Net} from "/components/net.js"
-let net = window.net = new Net()
+import {Net} from "/blox/net.js"
+import {Blox} from "/blox/blox.js"
 
-// produce a blox into the dom
-import {Blox} from "/components/blox.js"
-window.Blox = Blox
-let blox = new Blox(0,0,{onload:"/examples/tests"})
-blox.onload = "/examples/tests"
+// connect to server
+let net = new Net()
+
+// make a root node for our app
+let root = new Blox()
+
+// pipe inbound network traffic to root
+net.observe('*',root.onreceive.bind(root))
+
+// pipe outbound traffic to network
+Blox.prototype.publish = (blob)=> { net.publish(blob) }
+
+// produce a world
+root.name = root.path = "root" // TODO - unfortunately args are not in order
+root.onload("/worlds/mainworld")
 
 </script>
