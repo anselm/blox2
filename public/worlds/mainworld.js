@@ -48,3 +48,7 @@ export let myworld = {
 
 
 }
+
+export let zchat = {
+	blox:"/blox/chat/chatroom"
+}

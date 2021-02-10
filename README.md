@@ -1,10 +1,39 @@
 
-# BUGS
+# TODO
+
+	- game
+		- some kind of avatar picker
+		- have pieces that snap into a grid for a board game
+		- net rooms? -> some concept of only listening to traffic in an area you are in, lobby, room1 etc
+		- voice?
+		- crypto?
+		- a pile of pieces
+
+		- seastead -> can move one square at a time
+		- turtle -> can move below the board
+		- lobster -> can move 3 spaces
+		- dolphin -> can jump
+		- kayaker -> can move as far as it wants
+		- sailor -> can become any other piece
+
+
+
+	- net some kind of idle timer to kill old sockets and their children
+
+- chat widget
+	- set name itself with a popup
+
+
+
+- temp loading obj anim
+- more controls for nav- support phone
+- 3js complains about colors
+- probably some traffic filtering
+- mobile support?
 
 	- this is all very early
 	- i need to reduce the weight on onprops() at least as used by subclasses - examine
 	- right now as well the renderer still has to be made before the children and that is a bit mess
-	- networking needs more thought around dynamic object creation; it also echoes locally when it does not need to, and there is no room based filtering
 	- there should be a concept of active or inactive scenes (in a large game you don't want all traffic that is not in your room or nearby)
 
 # GENERAL IDEA

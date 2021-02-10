@@ -138,10 +138,13 @@ export class Blox {
 	ondelete() {}
 
 	onchilddelete(child) {
+		console.log("blox removing")
+		console.log(child)
 		delete this._children[child.name]
 	}
 
 	onreceive(blob) {
+		if(!blob.blox) return
 
 		// find the node by tracing down and inserting stubs above
 		let segments = blob.path.split("/")
@@ -169,7 +172,7 @@ export class Blox {
 		if(blob.event=="delete") {
 			if(!leaf) return
 			if(leaf.ondelete) leaf.ondelete()
-			if(parent.onchilddelete) parent.onchilddelete(child)
+			if(parent.onchilddelete) parent.onchilddelete(leaf)
 			return
 		}
 

@@ -1,34 +1,14 @@
-
+<!DOCTYPE html>
 <html>
-<head>
-<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.2/Tone.js" integrity="sha512-mC+4OB44BnfNO5Tgllht1G+rdH82tMFKIM9pPNoQSMFqYm8PnPCffmmqTt68XpkAiJrmsQJwvFWDl8Br1o6vUw==" crossorigin="anonymous"></script>
-
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.min.js" crossorigin="anonymous"></script>
-<script src='https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r125/examples/js/loaders/GLTFLoader.js'></script>
-
-
-<script src="/socket.io/socket.io.js"></script>
-
-<style>
-body {
-	touch-action: none;
-	font-family: 'Roboto', sans-serif;
-}
-</style>
-<style>
-body { touch-action: none; }
-</style>
-
-</head>
-
-<body>
-</body>
-
+	<head>
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+		<script src="/libs/three.min.js" crossorigin="anonymous"></script>
+		<script src='/libs/GLTFLoader.js'></script>
+		<script src="/libs/Tone.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+	<body>
+	</body>
 </html>
 
 <script type="module">
@@ -36,20 +16,40 @@ body { touch-action: none; }
 import {Net} from "/blox/net.js"
 import {Blox} from "/blox/blox.js"
 
-// connect to server
-let net = new Net()
+async function startup() {
 
-// make a root node for our app
-let root = new Blox()
+	// connect to server
+	let net = window.net = new Net()
 
-// pipe inbound network traffic to root
-net.observe('*',root.onreceive.bind(root))
+	// make a root node for our app
+	let root = new Blox()
 
-// pipe outbound traffic to network
-Blox.prototype.publish = (blob)=> { net.publish(blob) }
+	// pipe inbound network traffic to root
+	net.observe('*',root.onreceive.bind(root))
 
-// produce a world
-root.name = root.path = "root" // TODO - unfortunately args are not in order
-root.onload("/worlds/mainworld")
+	// pipe outbound traffic to network
+	Blox.prototype.publish = (blob)=> { net.publish(blob) }
+
+	// throttled lossy publishing - publish first fast, then throw away any traffic within 10ms
+	Blox.prototype.publish_update_others_volatile_throttled = (blob)=> {
+		blob.event = "update_others_volatile"
+		if(!blob._timer) {
+			net.publish(blob)
+			blob._timer = setTimeout(()=>{blob._timer=0},10)
+		} else {
+			clearTimeout(blob._timer)
+			blob._timer = setTimeout(()=>{ net.publish(blob); blob._timer=0},10)
+		}
+	}
+
+	// produce a world
+	root.name = root.path = "root"
+	await root.onload("/worlds/mainworld")
+
+	// ask for all server state once
+	net.publish({event:"refresh"})
+}
+
+startup()
 
 </script>

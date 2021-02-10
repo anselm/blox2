@@ -48,23 +48,32 @@ export class Mesh extends Group {
 				mesh = this.group = new THREE.Mesh(geometry,material)
 				mesh.rotation.x = -Math.PI/2
 				mesh.receiveShadow = true
+				mesh.blox = this
+				mesh.name = props.name
 				break;
 			case "box":
 				geometry = new THREE.BoxGeometry(2,2,2);
 				mesh = this.group = new THREE.Mesh(geometry,material)
 				mesh.castShadow = true
+				mesh.blox = this
+				mesh.name = props.name
 				break
 			case "sphere":
 				geometry = new THREE.SphereGeometry( 1, 32, 32 );
 				mesh = this.group = new THREE.Mesh(geometry,material)
 				mesh.castShadow = true
+				mesh.blox = this
+				mesh.name = props.name
 				break
 
 			default:
 
 				if(!this.loader) this.loader = new THREE.GLTFLoader();
 
+				// build before the async call below so that the mesh gets stuffed into scene - could use a temporary loading obj also TODO
 				this.group = new THREE.Group()
+				this.group.blox = this
+				this.group.name = props.name
 
 				this.loader.load(props.shape, glb => {
 
@@ -94,20 +103,24 @@ export class Mesh extends Group {
 		}
 	}
 
+	// onprops() on the base class basically will call these...
+
 	set xyz(val) {
-		if(!this.group) return
-		this.group.position.set(val.x,val.y,val.z)		
+		this.group.position.set(val.x,val.y,val.z)
 	}
 
 	set ypr(val) {
-		if(!this.group) return
 		this.group.rotation.set(val.x,val.y,val.z)		
 	}
 
 	set size(val) {
-		if(!this.group) return
 		this.group.scale.set(val.x,val.y,val.z)
 	}
+
+	///
+	/// for now send everything -> and is sent only to other parties
+	/// TODO later refine
+	///
 
 	toJSON() {
 		return {
