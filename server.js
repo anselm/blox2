@@ -70,5 +70,5 @@ io.on('connection', (socket) => {
 })
 
 http.listen(port, () => {
-	console.log('listening on *:5000')
+	console.log('listening on *:80')
 })
