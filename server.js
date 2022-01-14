@@ -3,7 +3,7 @@ const path = require('path')
 const app = express()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
-const port = 80
+const port = 5000
 
 app.use(express.static('public'))
 
@@ -70,5 +70,5 @@ io.on('connection', (socket) => {
 })
 
 http.listen(port, () => {
-	console.log('listening on *:80')
+	console.log('listening on *:'+port)
 })
