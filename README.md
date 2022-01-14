@@ -1,5 +1,7 @@
 # BLOX 2
 
+<img src="https://github.com/anselm/blox2/blob/main/example.png?raw=true"></img>
+
 Blox is a modular scripting language for building applications. It's more a "formalism" in that it is not hard for a programmer to circumvent, but the hope is that if programmers can work with novices, then we can have grammars that allow more participation.
 
 Some of the earlier thinking that has lead to this iteration can be found here:
