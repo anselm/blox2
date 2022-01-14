@@ -49,19 +49,24 @@ export class WalkGrab extends Group {
 
 		// TODO arguably doesn't have to send to self... but it is not a big deal if it does
 		// TODO arguably avatar creation should be a separate blox exposed in userland - not here at all
-		this.avatar = await this._parent.onchild({blox:"/blox/3d/mesh",name:name,shape:shape,color:color,xyz:xyz})
-		this.avatar.local = 1 // TODO improve
-		this.avatar.publish(this.avatar.toJSON())    
+		let mode = 0
+		if(mode == 0) {
+			this.avatar = await this._parent.onchild({blox:"/blox/3d/mesh",name:name,shape:shape,color:color,xyz:xyz})
+			this.avatar.local = 1 // TODO improve
+			this.avatar.publish(this.avatar.toJSON())
+		} else {
+			this.avatar = this._parent.group
+		}
 
-		// TODO should search not just assume that parent is a renderer
-		let render = this._parent
+		// TODO should search not just assume that parent parent is a renderer
+		let render = mode == 0 ? this._parent : this._parent._parent
 		let scene = render.scene
 		let camera = render.camera
 		let canvas = render.canvas
 		let renderer = render.renderer
 
 		// This is a way that the renderer can chase the target... TODO later it should be an explicit userland wire
-	    camera.idealtarget = this.avatar.group
+	    camera.idealtarget = mode == 0 ? this.avatar.group : this.avatar
 
 	    // Picking and dragging support
 		let raycaster = new THREE.Raycaster()
@@ -129,15 +134,23 @@ export class WalkGrab extends Group {
 		let onwheel = (e) => {
 			e.preventDefault()
 
-			// turn sideways drag into rotation
-			this.avatar.group.rotation.y += e.deltaX / 100.0
-
-			// turn forward drag into translation along current heading
-			let v = this.avatar.group.getWorldDirection(new THREE.Vector3()).multiplyScalar(e.deltaY/10)
-			this.avatar.group.position.add(v)
-
-			// publish changes
-			this.avatar.publish_update_others_volatile_throttled(this.avatar.toJSON())
+			if(mode == 0) {
+				// turn sideways drag into rotation
+				this.avatar.group.rotation.y += e.deltaX / 100.0
+				// turn forward drag into translation along current heading
+				let v = this.avatar.group.getWorldDirection(new THREE.Vector3()).multiplyScalar(e.deltaY/10)
+				this.avatar.group.position.add(v)
+				// publish changes
+				this.avatar.publish_update_others_volatile_throttled(this.avatar.toJSON())
+			} else {
+				// turn sideways drag into rotation
+				this.avatar.rotation.y += e.deltaX / 100.0
+				// turn forward drag into translation along current heading
+				let v = this.avatar.getWorldDirection(new THREE.Vector3()).multiplyScalar(e.deltaY/10)
+				this.avatar.position.add(v)
+				// publish changes
+				this.publish_update_others_volatile_throttled(this.avatar.toJSON())
+			}
 
 		}
 		canvas.addEventListener("wheel",onwheel,{passive:false,capture:true})

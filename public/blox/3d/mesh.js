@@ -76,6 +76,7 @@ export class Mesh extends Group {
 				this.group.name = props.name
 
 				this.loader.load(props.shape, glb => {
+					console.log("mesh: loaded " + props.shape)
 
 					glb.scene.traverse(o=>{
 						if(o.isMesh) o.castShadow = true

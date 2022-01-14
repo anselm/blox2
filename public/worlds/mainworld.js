@@ -11,40 +11,73 @@ export let myworld = {
 	mywalkgrab:{
 		blox:"/blox/3d/walkgrab",
 	},
-
+/*
+	myavatar:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/woman1.glb",
+		mywalkgrab:{
+			blox:"/blox/3d/walkgrab",
+		},
+		mycollider:{
+			blox:"/blox/3d/collider",
+			oncollide:function(blox) { console.log("collided1") }
+		}
+	},
+*/
 	myground:{
 		blox:"/blox/3d/mesh",
-		color:0x808080,
-		shape:"plane",
-		xyz:{x:0,y:0,z:0},
-		size:{x:1,y:1,z:1},
-	},
-
-	block1:{
-		blox:"/blox/3d/mesh",
-		color:0x800080,
-		shape:"box",
-		xyz:{x:15,y:0,z:0},
-		size:{x:3,y:8,z:3},
-	},
-
-
-	block2:{
-		blox:"/blox/3d/mesh",
-		color:0x008080,
+		color:0xc0c0e0,
 		shape:"sphere",
-		xyz:{x:-12,y:4,z:3},
-		size:{x:2,y:2,z:3},
+		xyz:{x:0,y:0,z:0},
+		size:{x:10,y:0.1,z:10},
+		mycollider:{
+			blox:"/blox/3d/collider",
+			oncollide:function(blox) { console.log("collided2") }
+		}
 	},
 
-
-	block3:{
+	blockz:{
 		blox:"/blox/3d/mesh",
-		color:0x808000,
-		shape:"box",
-		xyz:{x:18,y:3,z:4},
-		size:{x:1,y:14,z:1},
+		shape:"./meshes/magic_crystal.glb",
+		xyz:{x:0,y:1,z:0}
 	},
+
+	blocka:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/world_space_map_crystal.glb",
+		xyz:{x:-5,y:1,z:5},
+	},
+
+	blockb:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/world_space_map_crystal.glb",
+		xyz:{x:5,y:1,z:5},
+	},
+
+	blockc:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/world_space_map_crystal.glb",
+		xyz:{x:10,y:1,z:0},
+	},
+
+	blockd:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/world_space_map_crystal.glb",
+		xyz:{x:-10,y:1,z:0},
+	},
+
+	blocke:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/world_space_map_crystal.glb",
+		xyz:{x:-5,y:1,z:-5},
+	},
+
+	blockf:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/world_space_map_crystal.glb",
+		xyz:{x:5,y:1,z:-5},
+	},
+
 
 
 }

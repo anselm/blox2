@@ -104,10 +104,8 @@ export class Render extends Blox {
 				this.camera.updateProjectionMatrix();
 			}
 
-			for(let i = 0; i < this.scene.children.length;i++) {
-				let obj = this.scene.children[i]
-				if(obj.ontick) obj.ontick()
-			}
+			// run state
+			this.ontick()
 
 			// paint
 			renderer.render(this.scene, this.camera);

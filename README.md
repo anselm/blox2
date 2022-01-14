@@ -1,73 +1,92 @@
+# BLOX 2
 
-# TODO
+Blox is a modular scripting language for building applications. It's more a "formalism" in that it is not hard for a programmer to circumvent, but the hope is that if programmers can work with novices, then we can have grammars that allow more participation.
 
-	- game
-		- some kind of avatar picker
-		- have pieces that snap into a grid for a board game
-		- net rooms? -> some concept of only listening to traffic in an area you are in, lobby, room1 etc
-		- voice?
-		- crypto?
-		- a pile of pieces
+Some of the earlier thinking that has lead to this iteration can be found here:
 
-		- seastead -> can move one square at a time
-		- turtle -> can move below the board
-		- lobster -> can move 3 spaces
-		- dolphin -> can jump
-		- kayaker -> can move as far as it wants
-		- sailor -> can become any other piece
+1. https://github.com/anselm/blox (first pass thinking that had a more complicated engine than this one)
+2. https://anselm.medium.com/draft-visual-typewriters-telling-stories-in-3d-7cba736dfdb4
 
+## Running
 
+node server.js
 
+## Scenes
+
+A scene or world or "pile of stuff" is a collection of blox that can describe something useful - like a 3d world. Here is an example 3d world. The root node itself is a blox, that is a 3d renderer. It contains children blox, that paint the ground and other elements. There are children blox that implement behaviors in an ECS like paradigm.
+
+```
+export let myworld = {
+	blox:"/blox/3d/render",
+	mywalkgrab:{
+		blox:"/blox/3d/walkgrab",
+	},
+	myground:{
+		blox:"/blox/3d/mesh",
+		color:0xc0c0e0,
+		shape:"sphere",
+		xyz:{x:0,y:0,z:0},
+		size:{x:10,y:0.1,z:10},
+		mycollider:{
+			blox:"/blox/3d/collider",
+			oncollide:function(blox) { console.log("collided2") }
+		}
+	},
+	blockz:{
+		blox:"/blox/3d/mesh",
+		shape:"./meshes/magic_crystal.glb",
+		xyz:{x:0,y:1,z:0}
+	}
+}
+```
+
+## Blox Properties
+
+A blox is a node in a modular programming language. It is a largely declarative object (in javascript for now) that also has a few helper methods. Blox are intended to be wired together in a DAG and to handle events.
+
+Field properties of a blox include:
+
+	- owner
+	- uuid
+	- flavor/kind ( a blox can represent a blog post, or a 3d object or any other concept)
+	- name
+	- description
+	- image
+	- sigil
+	- permissions
+	- parent, position, orientation, scale
+	- value
+	- created
+	- updated
+
+There are also a few methods:
+
+	onload() -> a special way to inject the entirety of json description from disk
+
+	onprops() -> a way to populate this blox from a json description passed by hand
+
+	onready() -> called when a blox is done loading
+
+	onchild() -> a way to add a child to this blox
+
+	toJSON() -> convert this blox to json
+
+	ondelete() -> notification that this blox is being deleted soon
+
+	onchilddelete() -> notification that a child is being deleted
+
+	onreceive() -> changes inbound from somewhere (such as a network) that this blox needs to handle
+
+## BUGS
+
+	- smarter temp loading obj anim
+	- more controls for nav- support on phone
+	- 3js complains about colors
+	- i need to reduce the weight on onprops() at least as used by subclasses - examine???
+	- right now as well the renderer still has to be made before the children and that is a bit mess
 	- net some kind of idle timer to kill old sockets and their children
 
-- chat widget
-	- set name itself with a popup
-
-
-
-- temp loading obj anim
-- more controls for nav- support phone
-- 3js complains about colors
-- probably some traffic filtering
-- mobile support?
-
-	- this is all very early
-	- i need to reduce the weight on onprops() at least as used by subclasses - examine
-	- right now as well the renderer still has to be made before the children and that is a bit mess
-	- there should be a concept of active or inactive scenes (in a large game you don't want all traffic that is not in your room or nearby)
-
-# GENERAL IDEA
-
-This is a riff on the previous blox project, to simplify the grammar. Rather than an ECS pattern I only use a hierarchy of blox - some of which can contain behavior. Also I add networking.
-
-In general Blox is a modular scripting language for building applications. It's more a "formalism" in that it is not hard for a programmer to circumvent, but the hope is that if programmers can work with novices, then we can have grammars that allow participation.
-
-A typical application can be described like so:
-
-	renderer {
-		camera {}
-		light {}
-		ground {}
-		theremin {
-			kind:group
-			sphere1 {}
-			sphere2 {}
-			wire ( touch events from sphere1 to sphere2.xyz )
-		}
-		avatar {
-			controls
-		}
-	}
-
-# SOME USE CASES
-
-	- an audio toy see - generative music toy https://medium.com/@alexbainter/making-generative-music-in-the-browser-bfb552a26b0b
-	- various small games
-	- multiplayer collab work env
-	- migrate other various demos from blox1
-	- art and particle fx
-
-# PHILOSOPHY
+## PHILOSOPHY
 
 We live in a world filled with different kinds of jobs, roles, skills. Some of us are social workers, some are pure artists, some of us practice law and understand a complex legal landscape. Some of us are architects, understanding issues around building codes and the kinds of structures that humans like to inhabit. Many of us have at one time or another worked in service industry jobs, catering, bussing, even just washing dishes. Some of us are plumbers, or electricians, or teach high-school kids, or just write books, or technical documentation, a few of us play with financial markets or have the freedom to just travel and explore the world at our leisure.
 

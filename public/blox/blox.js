@@ -1,28 +1,3 @@
-/*
-
-Blox define a modular programming framework with the following principles
-
-	+ Creation
-
-		+ A blox is any class that defines the methods of the class Blox (below).
-		+ The default implementation (below) provides a json loader and a factory.
-
-	+ Organization
-
-		+ parent -> blox are arranged in a DAG (directed acyclic graph) similar to a filesystem, a DOM or scene-graph
-		+ children -> blox may have children blox
-
-	+ Events
-
-		+ blox handle events such as onload() if they define a method for it
-		+ blox allow listeners to listen to events a blox receives
-
-	+ Wires
-
-		+ Wires are one way to to define explicit ad-hoc relationships between blox at runtime
-		+ Wires can route events such as sphere.ontouch -> child.xyz.set
-
-*/
 
 let factory = {}
 
@@ -184,6 +159,12 @@ export class Blox {
 
 		// just send props to child
 		if(leaf.onprops) leaf.onprops(blob)
+	}
+
+	ontick() {
+		for(const [k,v] of Object.entries(this._children)) {
+			if(v.ontick) v.ontick()
+		}
 	}
 
 }
