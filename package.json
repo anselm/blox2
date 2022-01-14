@@ -6,10 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anselm/blox2.git"
-  },
+  "repository": "git+https://github.com/anselm/blox2.git",
   "author": "@anselm",
   "license": "BSD-2-Clause",
   "bugs": {
